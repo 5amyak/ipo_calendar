@@ -1,0 +1,12 @@
+{
+  "timeZone": "Asia/Kolkata",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/calendar",
+    "https://www.google.com/calendar/feeds"
+  ],
+  "dependencies": {
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8"
+}
