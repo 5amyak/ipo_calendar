@@ -1,5 +1,5 @@
 function createDescription_(ipoCompany) {
-  return `<h3>${ipoCompany['growwShortName']}</h3>` +
+  return `<h3>${ipoCompany['name']}</h3>` +
   `<b>Lot Size:</b> ${ipoCompany['lotSize']}<br/>` +
   `<b>Min Price:</b> ${ipoCompany['minPrice']}<br/>` +
   `<b>Max Price:</b> ${ipoCompany['maxPrice']}<br/><br/>` +

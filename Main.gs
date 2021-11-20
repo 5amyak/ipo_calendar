@@ -15,7 +15,7 @@ function createIpoEvent_(activeIpoListing) {
   let biddingEndDate = calculateDate_(ipoCompany['biddingEndDate'], ipoCompany['dailyEndTime']);
 
   if (!isIpoEventCreated_(ipoCompany, biddingStartDate)) {
-    let ipoEvent = calendar.createEvent(`${ipoCompany['name']} IPO`, biddingStartDate, biddingEndDate);
+    let ipoEvent = calendar.createEvent(`${ipoCompany['growwShortName']} IPO`, biddingStartDate, biddingEndDate);
     ipoEvent.setColor(CalendarApp.EventColor.GRAY);
     ipoEvent.setLocation(ZERODHA_IPO_BID_URL);
     ipoEvent.setDescription(createDescription_(ipoCompany));
