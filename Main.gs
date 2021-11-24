@@ -1,16 +1,16 @@
-const ACTIVE_IPO_JSON_URL = "https://groww.in/v1/api/stocks_ipo/v2/listing/user";
+const IPO_JSON_URL = "https://groww.in/v1/api/stocks_ipo/v2/listing/user";
 const ZERODHA_IPO_BID_URL = "https://console.zerodha.com/portfolio/ipo";
 const CALENDAR_ID = "54c9sqpapr248kn4nm4t0r50ds@group.calendar.google.com";
 
 const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
 
 function main() {
-  let activeIpoListings = fetchActiveIpoListings_();
+  let activeIpoListings = fetchIpoListings_('ACTIVE');
   activeIpoListings.forEach(createIpoEvent_);
 }
 
-function createIpoEvent_(activeIpoListing) {
-  let ipoCompany = activeIpoListing['company'];
+function createIpoEvent_(ipoListing) {
+  let ipoCompany = ipoListing['company'];
   let biddingStartDate = calculateDate_(ipoCompany['biddingStartDate'], ipoCompany['dailyStartTime']);
   let biddingEndDate = calculateDate_(ipoCompany['biddingEndDate'], ipoCompany['dailyEndTime']);
 
@@ -27,18 +27,18 @@ function createIpoEvent_(activeIpoListing) {
   }
 }
 
-function fetchActiveIpoListings_() {
-  let activeIpoListings = [];
-  let response = UrlFetchApp.fetch(ACTIVE_IPO_JSON_URL);
+function fetchIpoListings_(status) {
+  let ipoListings = [];
+  let response = UrlFetchApp.fetch(IPO_JSON_URL);
   if (response.getResponseCode() === 200) {
-    let ipoListings = JSON.parse(response.getContentText());
-    if ('ipoCompanyListingOrderMap' in ipoListings && 'ACTIVE' in ipoListings['ipoCompanyListingOrderMap'])
-      activeIpoListings = ipoListings['ipoCompanyListingOrderMap']['ACTIVE'];
-    console.log('Successfully fetched active IPO listings with value :: ', activeIpoListings);
+    let ipoInfo = JSON.parse(response.getContentText());
+    if ('ipoCompanyListingOrderMap' in ipoInfo && status in ipoInfo['ipoCompanyListingOrderMap'])
+      ipoListings = ipoInfo['ipoCompanyListingOrderMap'][status];
+    console.log(`Successfully fetched IPO listings with status :: ${status} and value :: `, ipoListings);
   } else {
-    console.error('Unable to fetch IPO details with response code :: ', response.getResponseCode());
+    console.error(`Unable to fetch IPO listings with status :: ${status} and response code :: `, response.getResponseCode());
   }
-  return activeIpoListings;
+  return ipoListings;
 }
 
 function isIpoEventCreated_(ipoCompany, biddingStartDate) {
