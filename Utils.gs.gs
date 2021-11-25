@@ -9,6 +9,22 @@ function createDescription_(ipoCompany) {
   `<a href="https://news.google.com/search?q=${ipoCompany['searchId']}">More Info</a>`
 }
 
+function isValidListing(ipoListing) {
+  if ('company' in ipoListing
+    && 'name' in ipoListing['company']
+    && 'minPrice' in ipoListing['company']
+    && 'maxPrice' in ipoListing['company']
+    && 'biddingStartDate' in ipoListing['company']
+    && 'biddingEndDate' in ipoListing['company']
+    && 'dailyStartTime' in ipoListing['company']
+    && 'dailyEndTime' in ipoListing['company']
+    && 'growwShortName' in ipoListing['company']
+    && 'isin' in ipoListing['company']) return true;
+  
+  console.error('Found an invalid listing with details :: ', ipoListing);
+  return false;
+}
+
 function calculateDate_(dateStr, timeStr) {
   let date = new Date(dateStr);
   date.setHours(0, 0, 0, 0);

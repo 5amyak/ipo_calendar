@@ -10,6 +10,7 @@ function main() {
 }
 
 function createIpoEvent_(ipoListing) {
+  if (!isValidListing(ipoListing)) return;
   let ipoCompany = ipoListing['company'];
   let biddingStartDate = calculateDate_(ipoCompany['biddingStartDate'], ipoCompany['dailyStartTime']);
   let biddingEndDate = calculateDate_(ipoCompany['biddingEndDate'], ipoCompany['dailyEndTime']);
@@ -34,9 +35,9 @@ function fetchIpoListings_(status) {
     let ipoInfo = JSON.parse(response.getContentText());
     if ('ipoCompanyListingOrderMap' in ipoInfo && status in ipoInfo['ipoCompanyListingOrderMap'])
       ipoListings = ipoInfo['ipoCompanyListingOrderMap'][status];
-    console.log(`Successfully fetched IPO listings with status :: ${status} and value :: `, ipoListings);
+    console.log(`Successfully fetched ${ipoListings.length} IPO listings with status ${status}`);
   } else {
-    console.error(`Unable to fetch IPO listings with status :: ${status} and response code :: `, response.getResponseCode());
+    console.error(`Unable to fetch IPO listings with status ${status} due to response code ${response.getResponseCode()}`);
   }
   return ipoListings;
 }
