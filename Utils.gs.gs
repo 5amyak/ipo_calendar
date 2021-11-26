@@ -10,16 +10,15 @@ function createDescription_(ipoCompany) {
 }
 
 function isValidListing(ipoListing) {
-  if ('company' in ipoListing
-    && 'name' in ipoListing['company']
-    && 'minPrice' in ipoListing['company']
-    && 'maxPrice' in ipoListing['company']
-    && 'biddingStartDate' in ipoListing['company']
-    && 'biddingEndDate' in ipoListing['company']
-    && 'dailyStartTime' in ipoListing['company']
-    && 'dailyEndTime' in ipoListing['company']
-    && 'growwShortName' in ipoListing['company']
-    && 'isin' in ipoListing['company']) return true;
+  if (ipoListing['company']['name'] !== null
+    && ipoListing['company']['minPrice'] !== null
+    && ipoListing['company']['maxPrice'] !== null
+    && ipoListing['company']['biddingStartDate'] !== null
+    && ipoListing['company']['biddingEndDate'] !== null
+    && ipoListing['company']['dailyStartTime'] !== null
+    && ipoListing['company']['dailyEndTime'] !== null
+    && ipoListing['company']['growwShortName'] !== null
+    && ipoListing['company']['isin'] !== null) return true;
   
   console.error('Found an invalid listing with details :: ', ipoListing);
   return false;
