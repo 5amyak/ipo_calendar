@@ -9,7 +9,7 @@ function createDescription_(ipoCompany) {
   `<a href="https://news.google.com/search?q=${ipoCompany['searchId']}">More Info</a>`
 }
 
-function isValidListing(ipoListing) {
+function isValidListing_(ipoListing) {
   if (ipoListing['company']['name'] !== null
     && ipoListing['company']['minPrice'] !== null
     && ipoListing['company']['maxPrice'] !== null
@@ -22,24 +22,4 @@ function isValidListing(ipoListing) {
   
   console.error('Found an invalid listing with details :: ', ipoListing);
   return false;
-}
-
-function calculateDate_(dateStr, timeStr) {
-  let date = new Date(dateStr);
-  date.setHours(0, 0, 0, 0);
-  date.setSeconds(hmsToSecondsOnly_(timeStr));
-  
-  return date;
-}
-
-function hmsToSecondsOnly_(str) {
-    var p = str.split(':'),
-        s = 0, m = 1;
-
-    while (p.length > 0) {
-        s += m * parseInt(p.pop(), 10);
-        m *= 60;
-    }
-
-    return s;
 }

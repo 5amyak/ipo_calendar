@@ -10,13 +10,14 @@ function main() {
 }
 
 function createIpoEvent_(ipoListing) {
-  if (!isValidListing(ipoListing)) return;
+  if (!isValidListing_(ipoListing)) return;
   let ipoCompany = ipoListing['company'];
-  let biddingStartDate = calculateDate_(ipoCompany['biddingStartDate'], ipoCompany['dailyStartTime']);
-  let biddingEndDate = calculateDate_(ipoCompany['biddingEndDate'], ipoCompany['dailyEndTime']);
+  let eventDate = new Date(ipoCompany['biddingEndDate']);
+  let eventStartDate = (new Date(eventDate.setHours(10, 0, 0, 0)));
+  let eventEndDate = (new Date(eventDate.setHours(16, 30, 0, 0)));
 
-  if (!isIpoEventCreated_(ipoCompany, biddingStartDate)) {
-    let ipoEvent = calendar.createEvent(`${ipoCompany['growwShortName']} IPO`, biddingStartDate, biddingEndDate);
+  if (!isIpoEventCreated_(ipoCompany, eventDate)) {
+    let ipoEvent = calendar.createEvent(`${ipoCompany['growwShortName']} IPO`, eventStartDate, eventEndDate);
     ipoEvent.setColor(CalendarApp.EventColor.GRAY);
     ipoEvent.setLocation(ZERODHA_IPO_BID_URL);
     ipoEvent.setDescription(createDescription_(ipoCompany));
@@ -42,11 +43,11 @@ function fetchIpoListings_(status) {
   return ipoListings;
 }
 
-function isIpoEventCreated_(ipoCompany, biddingStartDate) {
+function isIpoEventCreated_(ipoCompany, eventDate) {
   let isin = ipoCompany['isin'];
-  let events = calendar.getEventsForDay(biddingStartDate);
+  let events = calendar.getEventsForDay(eventDate);
   for (const event of events) {
-    console.log(`Found event with name ${event.getTitle()} on ${biddingStartDate}`)
+    console.log(`Found event with name ${event.getTitle()} on ${eventDate}`)
     if (event.getTag('isin') === isin) return true;
   }
 
