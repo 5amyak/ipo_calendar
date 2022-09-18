@@ -9,7 +9,7 @@ function createDescription_(ipoCompany) {
   `<a href="https://news.google.com/search?q=${ipoCompany['searchId']}">More Info</a>`
 }
 
-function isValidListing_(ipoListing) {
+function validateListing_(ipoListing) {
   if (ipoListing['company']['name'] !== null
     && ipoListing['company']['minPrice'] !== null
     && ipoListing['company']['maxPrice'] !== null
@@ -18,8 +18,7 @@ function isValidListing_(ipoListing) {
     && ipoListing['company']['dailyStartTime'] !== null
     && ipoListing['company']['dailyEndTime'] !== null
     && ipoListing['company']['growwShortName'] !== null
-    && ipoListing['company']['isin'] !== null) return true;
+    && ipoListing['company']['symbol'] !== null) return;
   
-  console.error('Found an invalid listing with details :: ', ipoListing);
-  return false;
+  throw 'Found an invalid listing';
 }

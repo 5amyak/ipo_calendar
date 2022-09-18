@@ -6,11 +6,21 @@ const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
 
 function main() {
   let activeIpoListings = fetchIpoListings_('ACTIVE');
-  activeIpoListings.forEach(createIpoEvent_);
+  let isAnyFailure = false;
+  for (let activeIpoListing of activeIpoListings) {
+    try {
+      createIpoEvent_(activeIpoListing);
+    } catch(e) {
+      isAnyFailure = true;
+      console.error('Unable to create IPO event due to :: ' + e + ' for :: ' + JSON.stringify(activeIpoListing));
+    }
+  }
+
+  if (isAnyFailure) throw 'Unable to create IPO event for some listings';
 }
 
 function createIpoEvent_(ipoListing) {
-  if (!isValidListing_(ipoListing)) return;
+  validateListing_(ipoListing);
   let ipoCompany = ipoListing['company'];
   let eventDate = new Date(ipoCompany['biddingEndDate']);
   let eventStartDate = (new Date(eventDate.setHours(10, 0, 0, 0)));
@@ -21,7 +31,7 @@ function createIpoEvent_(ipoListing) {
     ipoEvent.setColor(CalendarApp.EventColor.GRAY);
     ipoEvent.setLocation(ZERODHA_IPO_BID_URL);
     ipoEvent.setDescription(createDescription_(ipoCompany));
-    ipoEvent.setTag('isin', ipoCompany['isin']);
+    ipoEvent.setTag('symbol', ipoCompany['symbol']);
 
     console.log('IPO event successfully created for :: ', ipoCompany['name']);
   } else {
@@ -44,11 +54,11 @@ function fetchIpoListings_(status) {
 }
 
 function isIpoEventCreated_(ipoCompany, eventDate) {
-  let isin = ipoCompany['isin'];
+  let symbol = ipoCompany['symbol'];
   let events = calendar.getEventsForDay(eventDate);
   for (const event of events) {
     console.log(`Found event with name ${event.getTitle()} on ${eventDate}`)
-    if (event.getTag('isin') === isin) return true;
+    if (event.getTag('symbol') === symbol) return true;
   }
 
   return false;
