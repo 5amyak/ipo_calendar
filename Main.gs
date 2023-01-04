@@ -32,6 +32,8 @@ function createIpoEvent_(ipoListing) {
     ipoEvent.setLocation(ZERODHA_IPO_BID_URL);
     ipoEvent.setDescription(createDescription_(ipoCompany));
     ipoEvent.setTag('symbol', ipoCompany['symbol']);
+    ipoEvent.setTag('documentUrl', ipoCompany['documentUrl']);
+    ipoEvent.setTag('searchId', ipoCompany['searchId']);
 
     console.log('IPO event successfully created for :: ', ipoCompany['name']);
   } else {
@@ -54,11 +56,12 @@ function fetchIpoListings_(status) {
 }
 
 function isIpoEventCreated_(ipoCompany, eventDate) {
-  let symbol = ipoCompany['symbol'];
   let events = calendar.getEventsForDay(eventDate);
   for (const event of events) {
     console.log(`Found event with name ${event.getTitle()} on ${eventDate}`)
-    if (event.getTag('symbol') === symbol) return true;
+    if (event.getTag('symbol') === ipoCompany['symbol']) return true;
+    if (event.getTag('documentUrl') === ipoCompany['documentUrl']) return true;
+    if (event.getTag('searchId') === ipoCompany['searchId']) return true;
   }
 
   return false;
